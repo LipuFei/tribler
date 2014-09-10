@@ -108,7 +108,8 @@ class AllChannelCommunity(Community):
                     VoteCastPayload(),
                     self.check_votecast,
                     self.on_votecast,
-                    self.undo_votecast,
+                    undo_callback=self.undo_votecast,
+                    cancel_callback=self.undo_votecast,
                     batch=BatchConfiguration(max_window=batch_delay))
         ]
 
@@ -380,7 +381,9 @@ class AllChannelCommunity(Community):
         if latest_dispersy_id:
             message = self._dispersy.load_message_by_packetid(self, latest_dispersy_id)
             if message:
-                self.create_undo(message)
+                # replace undo with cancel message
+                #self.create_undo(message)
+                self.create_cancel(message)
 
         # create new vote message
         meta = self.get_meta_message(u"votecast")
