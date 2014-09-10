@@ -14,7 +14,7 @@ DEBUG = False
 class ChannelConversion(BinaryConversion):
 
     def __init__(self, community):
-        super(ChannelConversion, self).__init__(community, "\x01")
+        super(ChannelConversion, self).__init__(community, "\x02")
         self.define_meta_message(chr(1), community.get_meta_message(u"channel"), lambda message: self._encode_decode(self._encode_channel, self._decode_channel, message), self._decode_channel)
         self.define_meta_message(chr(2), community.get_meta_message(u"torrent"), lambda message: self._encode_decode(self._encode_torrent, self._decode_torrent, message), self._decode_torrent)
         self.define_meta_message(chr(3), community.get_meta_message(u"playlist"), lambda message: self._encode_decode(self._encode_playlist, self._decode_playlist, message), self._decode_playlist)
