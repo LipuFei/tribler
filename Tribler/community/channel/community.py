@@ -123,7 +123,8 @@ class ChannelCommunity(Community):
                     TorrentPayload(),
                     self._disp_check_torrent,
                     self._disp_on_torrent,
-                    self._disp_undo_torrent,
+                    undo_callback=self._disp_undo_torrent,
+                    cancel_callback=self._disp_undo_torrent,
                     batch=BatchConfiguration(max_window=batch_delay)),
             Message(self, u"playlist",
                     MemberAuthentication(),
@@ -133,7 +134,8 @@ class ChannelCommunity(Community):
                     PlaylistPayload(),
                     self._disp_check_playlist,
                     self._disp_on_playlist,
-                    self._disp_undo_playlist,
+                    undo_callback=self._disp_undo_playlist,
+                    cancel_callback=self._disp_undo_playlist,
                     batch=BatchConfiguration(max_window=batch_delay)),
             Message(self, u"comment",
                     MemberAuthentication(),
@@ -143,7 +145,8 @@ class ChannelCommunity(Community):
                     CommentPayload(),
                     self._disp_check_comment,
                     self._disp_on_comment,
-                    self._disp_undo_comment,
+                    undo_callback=self._disp_undo_comment,
+                    cancel_callback=self._disp_undo_comment,
                     batch=BatchConfiguration(max_window=batch_delay)),
             Message(self, u"modification",
                     MemberAuthentication(),
@@ -155,7 +158,8 @@ class ChannelCommunity(Community):
                     ModificationPayload(),
                     self._disp_check_modification,
                     self._disp_on_modification,
-                    self._disp_undo_modification,
+                    undo_callback=self._disp_undo_modification,
+                    cancel_callback=self._disp_undo_modification,
                     batch=BatchConfiguration(max_window=batch_delay)),
             Message(self, u"playlist_torrent",
                     MemberAuthentication(),
@@ -165,7 +169,8 @@ class ChannelCommunity(Community):
                     PlaylistTorrentPayload(),
                     self._disp_check_playlist_torrent,
                     self._disp_on_playlist_torrent,
-                    self._disp_undo_playlist_torrent,
+                    undo_callback=self._disp_undo_playlist_torrent,
+                    cancel_callback=self._disp_undo_playlist_torrent,
                     batch=BatchConfiguration(max_window=batch_delay)),
             Message(self, u"moderation",
                     MemberAuthentication(),
@@ -175,7 +180,8 @@ class ChannelCommunity(Community):
                     ModerationPayload(),
                     self._disp_check_moderation,
                     self._disp_on_moderation,
-                    self._disp_undo_moderation,
+                    undo_callback=self._disp_undo_moderation,
+                    cancel_callback=self._disp_undo_moderation,
                     batch=BatchConfiguration(max_window=batch_delay)),
             Message(self, u"mark_torrent",
                     MemberAuthentication(),
@@ -185,7 +191,8 @@ class ChannelCommunity(Community):
                     MarkTorrentPayload(),
                     self._disp_check_mark_torrent,
                     self._disp_on_mark_torrent,
-                    self._disp_undo_mark_torrent,
+                    undo_callback=self._disp_undo_mark_torrent,
+                    cancel_callback=self._disp_undo_mark_torrent,
                     batch=BatchConfiguration(max_window=batch_delay)),
             Message(self, u"missing-channel",
                     NoAuthentication(),
@@ -429,7 +436,9 @@ class ChannelCommunity(Community):
             message = self._dispersy.load_message_by_packetid(self, dispersy_id)
             if message:
                 if not message.undone:
-                    self.create_undo(message)
+                    # replace undo with cancel message
+                    #self.create_undo(message)
+                    self.create_cancel(message)
 
                 else:  # hmm signal gui that this message has been removed already
                     self._disp_undo_torrent([(None, None, message)])
@@ -439,7 +448,9 @@ class ChannelCommunity(Community):
             message = self._dispersy.load_message_by_packetid(self, dispersy_id)
             if message:
                 if not message.undone:
-                    self.create_undo(message)
+                    # replace undo with cancel message
+                    #self.create_undo(message)
+                    self.create_cancel(message)
 
                 else:  # hmm signal gui that this message has been removed already
                     self._disp_undo_playlist([(None, None, message)])
@@ -620,7 +631,9 @@ class ChannelCommunity(Community):
     def remove_comment(self, dispersy_id):
         message = self._dispersy.load_message_by_packetid(self, dispersy_id)
         if message:
-            self.create_undo(message)
+            # replace undo with cancel message
+            #self.create_undo(message)
+            self.create_cancel(message)
 
     # modify channel, playlist or torrent
     @call_on_reactor_thread
@@ -883,7 +896,9 @@ class ChannelCommunity(Community):
         for dispersy_id in dispersy_ids:
             message = self._dispersy.load_message_by_packetid(self, dispersy_id)
             if message:
-                self.create_undo(message)
+                # replace undo with cancel message
+                #self.create_undo(message)
+                self.create_cancel(message)
 
     @call_on_reactor_thread
     def _disp_create_playlist_torrents(self, playlist_packet, infohashes, store=True, update=True, forward=True):
