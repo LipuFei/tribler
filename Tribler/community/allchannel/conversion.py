@@ -9,7 +9,7 @@ from Tribler.dispersy.conversion import BinaryConversion
 class AllChannelConversion(BinaryConversion):
 
     def __init__(self, community):
-        super(AllChannelConversion, self).__init__(community, "\x01")
+        super(AllChannelConversion, self).__init__(community, "\x02")
         self.define_meta_message(chr(1), community.get_meta_message(u"channelcast"),
                                  self._encode_channelcast, self._decode_channelcast)
         self.define_meta_message(chr(2), community.get_meta_message(u"channelcast-request"),
