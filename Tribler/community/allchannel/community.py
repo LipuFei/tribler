@@ -111,14 +111,23 @@ class AllChannelCommunity(Community):
                     undo_callback=self.undo_votecast,
                     cancel_callback=self.undo_votecast,
                     batch=BatchConfiguration(max_window=batch_delay))
-                ]
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(AllChannelCommunity, self).__init__(*args, **kwargs)
+        self._blocklist = dict()
+        self._searchCallbacks = dict()
+        self._recentlyRequested = list()
+        self.integrate_with_tribler = False
+        self.auto_join_channel = False
+
+        self._channelcast_db = None
+        self._votecast_db = None
+        self._peer_db = None
 
     def initialize(self, integrate_with_tribler=True, auto_join_channel=False):
         super(AllChannelCommunity, self).initialize()
 
-        self._blocklist = {}
-        self._searchCallbacks = {}
-        self._recentlyRequested = []
         self.integrate_with_tribler = integrate_with_tribler
         self.auto_join_channel = auto_join_channel
 
