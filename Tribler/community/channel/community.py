@@ -30,6 +30,7 @@ if __debug__:
 
 logger = logging.getLogger(__name__)
 
+
 def warnDispersyThread(func):
     def invoke_func(*args, **kwargs):
         if not isInIOThread():
@@ -42,7 +43,17 @@ def warnDispersyThread(func):
     invoke_func.__name__ = func.__name__
     return invoke_func
 
+
 class ChannelCommunity(Community):
+
+    def __init__(self, *args, **kwargs):
+        super(ChannelCommunity, self).__init__(*args, **kwargs)
+        self._channel_id = None
+        self.integrate_with_tribler = False
+
+        self._peer_db = None
+        self._channelcast_db = None
+        self._modification_types = None
 
     """
     Each user owns zero or more ChannelCommunities that other can join and use to discuss.
@@ -62,7 +73,9 @@ class ChannelCommunity(Community):
             self._channelcast_db = ChannelCastDBHandler.getInstance()
 
             # tribler channel_id
-            self._channel_id = self._channelcast_db._db.fetchone(u"SELECT id FROM Channels WHERE dispersy_cid = ? and (peer_id <> -1 or peer_id ISNULL)", (buffer(self._master_member.mid),))
+            self._channel_id = self._channelcast_db._db.fetchone(
+                u"SELECT id FROM Channels WHERE dispersy_cid = ? and (peer_id <> -1 or peer_id ISNULL)",
+                (buffer(self._master_member.mid),))
 
             # modification_types
             self._modification_types = self._channelcast_db.modification_types
