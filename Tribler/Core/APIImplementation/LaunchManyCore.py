@@ -72,6 +72,10 @@ class TriblerLaunchMany(Thread):
 
         # modules
         self.rawserver = None
+
+        self.axiom_store = None
+        self.axiom_peer_db = None
+
         self.torrent_store = None
         self.rtorrent_handler = None
         self.tftp_handler = None
@@ -141,6 +145,13 @@ class TriblerLaunchMany(Thread):
                 from Tribler.Core.Modules.tracker_manager import TrackerManager
                 self.tracker_manager = TrackerManager(self.session)
                 self.tracker_manager.initialize()
+
+                from Tribler.Core.Database.database import AxiomStore
+                from Tribler.Core.Database.database_wrapper import PeerDatabaseHandler
+                self.axiom_store = AxiomStore(self.session)
+                self.axiom_store.initialize()
+
+                self.axiom_peer_db = PeerDatabaseHandler(self.session)
 
             if self.session.get_videoplayer():
                 self.videoplayer = VideoPlayer(self.session)
@@ -617,6 +628,12 @@ class TriblerLaunchMany(Thread):
         if self.torrent_store is not None:
             self.torrent_store.close()
             self.torrent_store = None
+
+        if self.axiom_peer_db is not None:
+            self.axiom_peer_db = None
+        if self.axiom_store is not None:
+            self.axiom_store.shutdown()
+            self.axiom_store = None
 
         if self.dispersy:
             self._logger.info("lmc: Shutting down Dispersy...")
