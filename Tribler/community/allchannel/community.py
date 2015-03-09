@@ -186,8 +186,7 @@ class AllChannelCommunity(Community):
             if mychannel_id:
                 peer_ids = set()
                 key = candidate.get_member().public_key
-                peer_ids.add(self._peer_db.addOrGetPeerID(key))
-
+                peer_ids.add(self.tribler_session.add_peer(key).storeID)
                 # see if all members on this address are subscribed to my channel
                 didFavorite = len(peer_ids) > 0
                 for peer_id in peer_ids:
@@ -451,7 +450,7 @@ class AllChannelCommunity(Community):
                             channel_id = self._channelcast_db._db.fetchone(insert_channel,
                                                                            (buffer(message.payload.cid), -1, ''))
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 votelist.append((channel_id, peer_id, dispersy_id, message.payload.vote, message.payload.timestamp))
 
@@ -692,6 +691,7 @@ class VoteCastDBStub():
         return
 
 
+# TODO(lipu): Fix this because we switched to axiom
 class PeerDBStub():
 
     def __init__(self, dispersy):

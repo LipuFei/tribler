@@ -303,7 +303,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
                 self._channel_id = self._channelcast_db.on_channel_from_dispersy(self._master_member.mid,
                                                                                  peer_id,
                                                                                  message.payload.name,
@@ -370,7 +370,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 # sha_other_peer = (sha1(str(message.candidate.sock_addr) + self.my_member.mid))
                 torrentlist.append(
@@ -461,7 +461,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 self._channelcast_db.on_playlist_from_dispersy(self._channel_id,
                                                                dispersy_id,
@@ -546,7 +546,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 mid_global_time = pack('!20sQ', message.authentication.member.mid, message.distribution.global_time)
 
@@ -765,7 +765,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 # always store metadata
                 self._channelcast_db.on_metadata_from_dispersy(message_name,
@@ -912,7 +912,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 self._channelcast_db.on_playlist_torrent(dispersy_id,
                                                          playlist_dispersy_id,
@@ -967,7 +967,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 # if cause packet is present, it is enforced by conversion
                 cause = message.payload.causepacket.packet_id
@@ -976,7 +976,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     by_peer_id = None
                 else:
-                    by_peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    by_peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
 
                 # determine if we are reverting latest
                 updateTorrent = False
@@ -1046,7 +1046,7 @@ class ChannelCommunity(Community):
                 if authentication_member == self._my_member:
                     peer_id = None
                 else:
-                    peer_id = self._peer_db.addOrGetPeerID(authentication_member.public_key)
+                    peer_id = self.tribler_session.add_peer(authentication_member.public_key).storeID
                 self._channelcast_db.on_mark_torrent(
                     self._channel_id,
                     dispersy_id,

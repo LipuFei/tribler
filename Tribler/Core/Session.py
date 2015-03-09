@@ -650,3 +650,21 @@ class Session(SessionConfigInterface):
         if not self.lm.ltmgr:
             raise OperationNotEnabledByConfigurationException("libtorrent is not enabled")
         self.lm.ltmgr.set_download_rate_limit(rate)
+        return self.lm.torrent_search_manager.search(keywords)
+
+    # Database-related APIs
+    def get_peer(self, peer_mid):
+        """
+        Gets a Peer object with the given peer member ID.
+        :param peer_mid: The given peer member ID.
+        :return: The Peer object if exists, None otherwise.
+        """
+        return self.lm.axiom_peer_db.get_peer(peer_mid)
+
+    def add_peer(self, peer_mid):
+        """
+        Adds a new Peer with the given peer member ID into the database.
+        :param peer_mid: The given peer member ID.
+        :return: The Peer object if successful, None otherwise.
+        """
+        return self.lm.axiom_peer_db.add_peer(peer_mid)
