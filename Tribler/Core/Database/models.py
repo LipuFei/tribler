@@ -30,6 +30,16 @@ class Torrent(item.Item):
     next_tracker_check = attributes.integer(allowNone=False, default=0)
 
 
+class MyDownload(item.Item):
+    typeName = u'MyDownload'
+    schemaVersion = 1
+
+    torrent = attributes.reference(allowNone=False, reftype=Torrent,
+                                   whenDeleted=attributes.reference.CASCADE)
+    destination_path = attributes.text(allowNone=True)
+    creation_time = attributes.integer(allowNone=False)
+
+
 class Tracker(item.Item):
     typeName = u'Tracker'
     schemaVersion = 1
