@@ -3,8 +3,9 @@ from abc import ABCMeta
 from binascii import hexlify
 from axiom.errors import ItemNotFound
 
-from .models import Peer
+from .models import Peer, Torrent
 
+from Tribler.Core.simpledefs import INFOHASH_LENGTH
 from Tribler.Core.CacheDB.SqliteCacheDBHandler import LimitedOrderedDict
 from Tribler.dispersy.util import blocking_call_on_reactor_thread
 
@@ -65,3 +66,43 @@ class PeerDatabaseHandler(AbstractDatabaseHandler):
         except ItemNotFound:
             peer = Peer(store=self._store.store, peer_mid=peer_mid)
         return peer
+
+
+class TorrentDatabaseHandler(AbstractDatabaseHandler):
+    """
+    Mainly handles requests with the Torrent and Tracker tables.
+    """
+
+    @blocking_call_on_reactor_thread
+    def get_torrent(self, infohash):
+        """
+        Gets a Torrent object with the given infohash.
+        :param infohash: The given infohash.
+        :return: The Torrent object if exists, otherwise None.
+        """
+        assert isinstance(infohash, str), u"infohash is not str: %s" % type(infohash)
+        assert len(infohash) == INFOHASH_LENGTH, u"infohash is not 20-character long: %s" % len(infohash)
+
+        try:
+            torrent = self._store.store.findUnique(Peer, Torrent.infohash == infohash)
+        except ItemNotFound:
+            torrent = None
+            self._logger.warn(u"Torrent not found with infohash: %s", hexlify(infohash))
+        return torrent
+
+    def add_uncollected_torrent(self, torrent_dict):
+        pass
+
+    def add_collected_torrent(self, tdef):
+        """
+
+        :param tdef:
+        :return:
+        """
+        pass
+
+    def update_torrent(self, infohash):
+        pass
+
+    def get_collected_torrent(self, infohash):
+        pass

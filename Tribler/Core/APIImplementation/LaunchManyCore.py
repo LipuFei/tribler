@@ -82,7 +82,6 @@ class TriblerLaunchMany(Thread):
 
         self.cat = None
         self.metadata_db = None
-        self.peer_db = None
         self.torrent_db = None
         self.mypref_db = None
         self.votecast_db = None
@@ -117,7 +116,7 @@ class TriblerLaunchMany(Thread):
 
             # TODO(emilon): move this to a megacache component or smth
             if self.session.get_megacache():
-                from Tribler.Core.CacheDB.SqliteCacheDBHandler import (PeerDBHandler, TorrentDBHandler,
+                from Tribler.Core.CacheDB.SqliteCacheDBHandler import (TorrentDBHandler,
                                                                        MyPreferenceDBHandler, VoteCastDBHandler,
                                                                        ChannelCastDBHandler, MetadataDBHandler)
                 from Tribler.Category.Category import Category
@@ -128,7 +127,6 @@ class TriblerLaunchMany(Thread):
 
                 # create DBHandlers
                 self.metadata_db = MetadataDBHandler(self.session)
-                self.peer_db = PeerDBHandler(self.session)
                 self.torrent_db = TorrentDBHandler(self.session)
                 self.mypref_db = MyPreferenceDBHandler(self.session)
                 self.votecast_db = VoteCastDBHandler(self.session)
@@ -136,7 +134,6 @@ class TriblerLaunchMany(Thread):
 
                 # initializes DBHandlers
                 self.metadata_db.initialize()
-                self.peer_db.initialize()
                 self.torrent_db.initialize()
                 self.mypref_db.initialize()
                 self.votecast_db.initialize()
@@ -655,14 +652,12 @@ class TriblerLaunchMany(Thread):
             self.votecast_db.close()
             self.mypref_db.close()
             self.torrent_db.close()
-            self.peer_db.close()
             self.metadata_db.close()
 
             self.channelcast_db = None
             self.votecast_db = None
             self.mypref_db = None
             self.torrent_db = None
-            self.peer_db = None
             self.metadata_db = None
 
         if self.mainline_dht:

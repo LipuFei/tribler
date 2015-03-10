@@ -123,7 +123,6 @@ class AllChannelCommunity(Community):
 
         self._channelcast_db = None
         self._votecast_db = None
-        self._peer_db = None
 
     def initialize(self, tribler_session=None, auto_join_channel=False):
         super(AllChannelCommunity, self).initialize()
@@ -132,17 +131,15 @@ class AllChannelCommunity(Community):
         self.auto_join_channel = auto_join_channel
 
         if tribler_session is not None:
-            from Tribler.Core.simpledefs import NTFY_CHANNELCAST, NTFY_VOTECAST, NTFY_PEERS
+            from Tribler.Core.simpledefs import NTFY_CHANNELCAST, NTFY_VOTECAST
 
             # tribler channelcast database
             self._channelcast_db = tribler_session.open_dbhandler(NTFY_CHANNELCAST)
             self._votecast_db = tribler_session.open_dbhandler(NTFY_VOTECAST)
-            self._peer_db = tribler_session.open_dbhandler(NTFY_PEERS)
 
         else:
             self._channelcast_db = ChannelCastDBStub(self._dispersy)
             self._votecast_db = VoteCastDBStub(self._dispersy)
-            self._peer_db = PeerDBStub(self._dispersy)
 
         self.register_task(u"channelcast",
                            LoopingCall(self.create_channelcast)).start(CHANNELCAST_FIRST_MESSAGE, now=True)
@@ -689,13 +686,3 @@ class VoteCastDBStub():
 
     def get_latest_vote_dispersy_id(self, channel_id, voter_id):
         return
-
-
-# TODO(lipu): Fix this because we switched to axiom
-class PeerDBStub():
-
-    def __init__(self, dispersy):
-        self._dispersy = dispersy
-
-    def addOrGetPeerID(self, public_key):
-        return public_key

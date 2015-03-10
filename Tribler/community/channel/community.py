@@ -53,7 +53,6 @@ class ChannelCommunity(Community):
         self.tribler_session = None
         self.integrate_with_tribler = None
 
-        self._peer_db = None
         self._channelcast_db = None
 
         self._modification_types = None
@@ -65,10 +64,9 @@ class ChannelCommunity(Community):
         super(ChannelCommunity, self).initialize()
 
         if self.integrate_with_tribler:
-            from Tribler.Core.simpledefs import NTFY_PEERS, NTFY_CHANNELCAST
+            from Tribler.Core.simpledefs import NTFY_CHANNELCAST
 
             # tribler channelcast database
-            self._peer_db = tribler_session.open_dbhandler(NTFY_PEERS)
             self._channelcast_db = tribler_session.open_dbhandler(NTFY_CHANNELCAST)
 
             # tribler channel_id

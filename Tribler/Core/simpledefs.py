@@ -49,7 +49,6 @@ STATEDIR_SESSCONFIG = 'libtribler.conf'
 
 # subjects
 NTFY_METADATA = 'metadata'
-NTFY_PEERS = 'peers'
 NTFY_TORRENTS = 'torrents'
 NTFY_PLAYLISTS = 'playlists'
 NTFY_COMMENTS = 'comments'

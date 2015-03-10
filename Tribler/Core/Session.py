@@ -14,7 +14,7 @@ from Tribler.Core.CacheDB.sqlitecachedb import SQLiteCacheDB
 from Tribler.Core.SessionConfig import SessionConfigInterface, SessionStartupConfig
 from Tribler.Core.Upgrade.upgrade import TriblerUpgrader
 from Tribler.Core.exceptions import NotYetImplementedException, OperationNotEnabledByConfigurationException
-from Tribler.Core.simpledefs import (STATEDIR_PEERICON_DIR, STATEDIR_DLPSTATE_DIR, NTFY_PEERS, NTFY_TORRENTS,
+from Tribler.Core.simpledefs import (STATEDIR_PEERICON_DIR, STATEDIR_DLPSTATE_DIR, NTFY_TORRENTS,
                                      NTFY_MYPREFERENCES, NTFY_VOTECAST, NTFY_CHANNELCAST, NTFY_UPDATE, NTFY_INSERT,
                                      NTFY_DELETE, NTFY_METADATA, STATEDIR_TORRENT_STORE_DIR)
 
@@ -381,8 +381,7 @@ class Session(SessionConfigInterface):
         specified here.
         @return A reference to a DBHandler class for the specified subject or
         None when the Session was not started with megacaches enabled.
-        <pre> NTFY_PEERS -> PeerDBHandler
-        NTFY_TORRENTS -> TorrentDBHandler
+        <pre> NTFY_TORRENTS -> TorrentDBHandler
         NTFY_MYPREFERENCES -> MyPreferenceDBHandler
         NTFY_VOTECAST -> VotecastDBHandler
         NTFY_CHANNELCAST -> ChannelCastDBHandler
@@ -395,8 +394,6 @@ class Session(SessionConfigInterface):
         # with self.sesslock:
         if subject == NTFY_METADATA:
             return self.lm.metadata_db
-        elif subject == NTFY_PEERS:
-            return self.lm.peer_db
         elif subject == NTFY_TORRENTS:
             return self.lm.torrent_db
         elif subject == NTFY_MYPREFERENCES:
