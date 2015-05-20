@@ -5,7 +5,8 @@ from axiom.store import Store
 
 from Tribler.dispersy.util import blocking_call_on_reactor_thread
 
-from .models import Peer, Torrent, MyDownload, Tracker, TorrentTrackerMap
+from .models import Torrent, MyDownload, Tracker, TorrentTrackerMap
+from .channel_models import Peer, Channel
 
 AXIOM_DIR = u"axiom_store"
 
@@ -30,11 +31,14 @@ class AxiomStore(object):
         self._store = Store(work_dir)
 
         # create tables if they do not exist
-        self._store.getTableName(Peer)
         self._store.getTableName(Torrent)
         self._store.getTableName(MyDownload)
         self._store.getTableName(Tracker)
         self._store.getTableName(TorrentTrackerMap)
+
+        # channel-related tables
+        self._store.getTableName(Peer)
+        self._store.getTableName(Channel)
 
     @blocking_call_on_reactor_thread
     def shutdown(self):

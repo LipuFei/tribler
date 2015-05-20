@@ -1,13 +1,6 @@
 from axiom import item, attributes
 
 
-class Peer(item.Item):
-    typeName = u'Peer'
-    schemaVersion = 1
-
-    peer_mid = attributes.bytes(allowNone=False, indexed=True)
-
-
 class Torrent(item.Item):
     typeName = u'Torrent'
     schemaVersion = 1
