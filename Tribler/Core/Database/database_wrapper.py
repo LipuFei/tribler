@@ -13,7 +13,7 @@ from .models import Peer, Torrent, MyDownload, Tracker, TorrentTrackerMap
 from Tribler.Core.simpledefs import INFOHASH_LENGTH
 from Tribler.Core.TorrentDef import TorrentDef
 from Tribler.Core.CacheDB.SqliteCacheDBHandler import LimitedOrderedDict
-from Tribler.TrackerChecking.TrackerUtility import getUniformedURL
+from Tribler.Core.Utilities.tracker_utils import get_uniformed_tracker_url
 
 from Tribler.dispersy.util import blocking_call_on_reactor_thread
 
@@ -284,7 +284,7 @@ class TorrentDatabaseHandler(AbstractDatabaseHandler):
                 return
 
         for raw_tracker_url in tracker_list:
-            tracker_url = getUniformedURL(raw_tracker_url)
+            tracker_url = get_uniformed_tracker_url(raw_tracker_url)
             if tracker_url is None:
                 self._logger.warn(u"Skipping invalid tracker: %s", repr(raw_tracker_url))
                 continue
